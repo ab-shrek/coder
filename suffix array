@@ -1,0 +1,67 @@
+#include<iostream>
+#include<algorithm>
+#include <string>
+using namespace std;
+struct viki
+{
+	long long index;
+	long long a;
+	long long b;
+}original[10000];
+bool fun(viki u,viki v)
+{	
+	return ((u.a!=v.a)?u.a<v.a:u.b<v.b);
+}
+int main()
+{
+	string q;
+	cin>>q;
+	long long n=q.length();
+	long long ind[n];
+	for(long long i=0;i<n-1;i++)
+	{
+		original[i].index=i;
+		original[i].a=q[i]-'a';
+		original[i].b=q[i+1]-'a';
+	}
+	original[n-1].index=n-1;
+	original[n-1].a=q[n-1]-'a';
+	original[n-1].b=-1;
+	sort(original,original+n,fun);
+	for(long long i=0;i<n;i++)
+	cout<<original[i].index<<"  "<<original[i].a<<" "<<original[i].b<<endl;
+	for(long long k=4;k<2*n;k*=2)
+	{
+		original[0].a=0;
+		long long h=0;
+		for(long long i=0;i<n;i++)
+		ind[original[i].index]=i;
+		long long acha=original[0].a;
+		for(long long i=1;i<n;i++)
+		{
+			if(original[i].a!=acha||original[i].b!=original[i-1].b)
+			{
+				acha=original[i].a;
+				original[i].a=++h;	
+			}
+			else
+			{
+				acha=original[i].a;
+				original[i].a=h;
+			}
+		}
+		for(long long i=0;i<n;i++)
+		{
+			if(original[i].index+k/2>=n)
+			original[i].b=-1;
+			else
+			original[i].b=original[ind[original[i].index+k/2]].a;
+		}
+		sort(original,original+n,fun);
+		for(long long i=0;i<n;i++)
+		cout<<original[i].index<<"  "<<original[i].a<<" "<<original[i].b<<endl;
+	}
+	cout<<endl;
+	for(long long i=0;i<n;i++)
+	cout<<original[i].index<<"   "<<q.substr(original[i].index)<<endl;
+}
