@@ -1,0 +1,51 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	string p;
+	string t;
+	cin>>p>>t;
+	long long n=p.length();
+	long long kmp[n];
+	kmp[0]=0;
+	long long i=1;
+	long long j=0;
+	while(i<n)
+	{
+		if(p[i]==p[j])
+		{
+			j++;
+			kmp[i]=j;
+			i++;
+		}
+		else
+		{
+			if(j==0)
+			{
+				kmp[i]=0;
+				i++;
+			}
+			else
+			j=kmp[j-1];
+		}
+	}
+	for(i=0,j=0;j<t.length()&&i<n;)
+	{
+		if(p[i]==t[j])
+		{
+			i++;
+			j++;
+		}
+		else
+		{
+			if(i!=0)
+			i=kmp[i-1];
+			else
+			j++;
+		}
+	}
+	if(i==n)
+	cout<<j-p.length()<<"  "<<t.substr(j-p.length(),p.length())<<endl;
+	else
+	cout<<"not_found:("<<endl;
+}
